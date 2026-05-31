@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd:*)",
+      "Bash(rm -rf docs/.github)",
+      "Bash(mkdir -p .github/agents)",
+      "Bash(touch .github/agents/feasibility-researcher.agent.md .github/agents/implementation-planner.agent.md .github/agents/code-reviewer.agent.md .github/agents/test-writer.agent.md)",
+      "Bash(touch .github/prompts/spec.prompt.md .github/prompts/plan.prompt.md .github/prompts/implement.prompt.md .github/prompts/retro.prompt.md)"
+    ]
+  }
+}
