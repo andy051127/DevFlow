@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:padding="16dp">
+
+    <!-- 앱 이름 -->
+    <TextView
+        android:id="@+id/widget_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="💻 DevFlow"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="#2563EB" />
+
+    <!-- 완료 현황 텍스트 -->
+    <TextView
+        android:id="@+id/widget_progress_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="오늘 루틴 - / - 완료"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#1E293B" />
+
+    <!-- 프로그레스 바 -->
+    <ProgressBar
+        android:id="@+id/widget_progress_bar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginTop="8dp"
+        android:progress="0"
+        android:max="100"
+        android:progressTint="#2563EB"
+        android:progressBackgroundTint="#E2E8F0" />
+
+    <!-- 스트릭 정보 -->
+    <TextView
+        android:id="@+id/widget_streak_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text=""
+        android:textSize="12sp"
+        android:textColor="#64748B" />
+
+</LinearLayout>

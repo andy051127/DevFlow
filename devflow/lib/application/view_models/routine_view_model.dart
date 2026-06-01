@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/routine.dart';
 import '../../domain/services/streak_service.dart';
 import '../../data/repositories/routine_repository.dart';
+import '../services/widget_service.dart';
 
 final routineRepositoryProvider = Provider((ref) => RoutineRepository());
 final streakServiceProvider = Provider((ref) => StreakService());
@@ -65,6 +66,7 @@ class RoutineViewModel extends StateNotifier<AsyncValue<List<Routine>>> {
       await _repo.markComplete(routineId, now);
     }
     _ref.invalidate(completedRoutineIdsProvider);
+    WidgetService.instance.updateWidget();
   }
 }
 
