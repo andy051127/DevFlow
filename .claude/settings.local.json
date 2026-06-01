@@ -6,7 +6,10 @@
       "Bash(mkdir -p .github/agents)",
       "Bash(touch .github/agents/feasibility-researcher.agent.md .github/agents/implementation-planner.agent.md .github/agents/code-reviewer.agent.md .github/agents/test-writer.agent.md)",
       "Bash(touch .github/prompts/spec.prompt.md .github/prompts/plan.prompt.md .github/prompts/implement.prompt.md .github/prompts/retro.prompt.md)",
-      "Bash(flutter:*)"
+      "Bash(flutter:*)",
+      "Bash(xargs grep:*)",
+      "Bash(grep -r \"achievement\\\\|Achievement\" /c/app/finalExam/devflow/lib --include=*.dart)",
+      "Bash(find /c/app/finalExam/devflow/lib/presentation -type f -name \"*.dart\" -exec basename {})"
     ]
   }
 }

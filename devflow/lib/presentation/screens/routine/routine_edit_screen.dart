@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../application/view_models/routine_view_model.dart';
+import '../../../application/services/notification_service.dart';
+import '../../../application/providers/notification_provider.dart';
 import '../../../domain/entities/routine.dart';
 
 class RoutineEditScreen extends ConsumerStatefulWidget {
@@ -18,6 +20,7 @@ class _RoutineEditScreenState extends ConsumerState<RoutineEditScreen> {
   String _icon = '💻';
   String _color = 'FF2563EB';
   List<int> _repeatDays = [0, 1, 2, 3, 4]; // 월~금 기본
+  TimeOfDay? _alarmTime;
   Routine? _existing;
 
   final _dayLabels = ['월', '화', '수', '목', '금', '토', '일'];
@@ -38,6 +41,11 @@ class _RoutineEditScreenState extends ConsumerState<RoutineEditScreen> {
       _icon = args.icon;
       _color = args.color;
       _repeatDays = List.from(args.repeatDays);
+      if (args.alarmTime != null) {
+        final parts = args.alarmTime!.split(':');
+        _alarmTime = TimeOfDay(
+            hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+      }
     }
   }
 
@@ -51,6 +59,10 @@ class _RoutineEditScreenState extends ConsumerState<RoutineEditScreen> {
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final alarmStr = _alarmTime != null
+        ? '${_alarmTime!.hour.toString().padLeft(2, '0')}:${_alarmTime!.minute.toString().padLeft(2, '0')}'
+        : null;
+
     final routine = Routine(
       id: _existing?.id,
       name: _nameController.text.trim(),
@@ -58,6 +70,7 @@ class _RoutineEditScreenState extends ConsumerState<RoutineEditScreen> {
       color: _color,
       repeatDays: _repeatDays,
       goal: _goalController.text.trim().isEmpty ? null : _goalController.text.trim(),
+      alarmTime: alarmStr,
       createdAt: _existing?.createdAt ?? DateTime.now(),
     );
 
@@ -66,6 +79,14 @@ class _RoutineEditScreenState extends ConsumerState<RoutineEditScreen> {
       await vm.add(routine);
     } else {
       await vm.update(routine);
+    }
+
+    // 알림 전체 설정이 on일 때만 예약
+    final notifEnabled = ref.read(notificationEnabledProvider);
+    if (notifEnabled) {
+      // id를 얻기 위해 저장 후 재조회 대신 routineId를 직접 사용
+      final savedRoutine = routine.copyWith(id: routine.id ?? _existing?.id);
+      await NotificationService.instance.scheduleRoutineNotifications(savedRoutine);
     }
 
     if (mounted) Navigator.pop(context);
@@ -199,6 +220,36 @@ class _RoutineEditScreenState extends ConsumerState<RoutineEditScreen> {
                   }
                 }),
               )),
+            ),
+            const SizedBox(height: 16),
+
+            // 알람 시간 선택
+            Text('알람 시간 (선택)', style: Theme.of(context).textTheme.titleSmall),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.alarm, size: 18),
+                  label: Text(_alarmTime == null
+                      ? '시간 설정 안 함'
+                      : _alarmTime!.format(context)),
+                  onPressed: () async {
+                    final picked = await showTimePicker(
+                      context: context,
+                      initialTime: _alarmTime ?? const TimeOfDay(hour: 8, minute: 0),
+                    );
+                    if (picked != null) setState(() => _alarmTime = picked);
+                  },
+                ),
+                if (_alarmTime != null) ...[
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: const Icon(Icons.clear, size: 18),
+                    tooltip: '알람 해제',
+                    onPressed: () => setState(() => _alarmTime = null),
+                  ),
+                ],
+              ],
             ),
             const SizedBox(height: 24),
 

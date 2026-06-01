@@ -12,7 +12,16 @@ class StatsScreen extends ConsumerWidget {
     final routinesAsync = ref.watch(routineViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('통계')),
+      appBar: AppBar(
+        title: const Text('통계'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.emoji_events_outlined),
+            tooltip: '업적',
+            onPressed: () => Navigator.pushNamed(context, '/achievements'),
+          ),
+        ],
+      ),
       body: statsAsync.when(
         data: (stats) {
           final heatmap = stats['heatmap'] as Map<DateTime, int>;

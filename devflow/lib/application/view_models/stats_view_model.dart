@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/services/streak_service.dart';
+import '../../domain/services/achievement_service.dart';
+import '../../domain/entities/achievement.dart';
 import '../../data/repositories/routine_repository.dart';
 import 'routine_view_model.dart';
 
@@ -27,4 +29,22 @@ final statsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
     'streaks': streaks,
     'totalDays': totalDays,
   };
+});
+
+// 전체 루틴 중 가장 높은 스트릭 기준으로 업적 평가
+final achievementProvider = FutureProvider<List<Achievement>>((ref) async {
+  final repo = ref.read(routineRepositoryProvider);
+  final streakService = ref.read(streakServiceProvider);
+  final achievementService = AchievementService();
+  final routines = await repo.getAll();
+
+  int maxStreak = 0;
+  for (final r in routines) {
+    if (r.id == null) continue;
+    final dates = await repo.getCompletedDates(r.id!);
+    final s = streakService.calculate(dates);
+    if (s > maxStreak) maxStreak = s;
+  }
+
+  return achievementService.evaluate(maxStreak);
 });

@@ -14,6 +14,24 @@ final upcomingSchedulesProvider = FutureProvider<List<Schedule>>((ref) async {
   return ref.read(scheduleRepositoryProvider).getUpcoming();
 });
 
+// 날짜별 일정 (캘린더용)
+final scheduleByDateProvider =
+    FutureProvider.family<List<Schedule>, DateTime>((ref, date) async {
+  return ref.read(scheduleRepositoryProvider).getByDate(date);
+});
+
+// 전체 일정을 날짜 Map으로 변환 (캘린더 마커용)
+final scheduleEventMapProvider =
+    FutureProvider<Map<DateTime, List<Schedule>>>((ref) async {
+  final schedules = await ref.read(scheduleRepositoryProvider).getAll();
+  final map = <DateTime, List<Schedule>>{};
+  for (final s in schedules) {
+    final key = DateTime(s.date.year, s.date.month, s.date.day);
+    map.putIfAbsent(key, () => []).add(s);
+  }
+  return map;
+});
+
 class ScheduleViewModel extends StateNotifier<AsyncValue<List<Schedule>>> {
   final ScheduleRepository _repo;
 

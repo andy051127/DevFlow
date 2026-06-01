@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../application/view_models/routine_view_model.dart';
 import '../../../application/view_models/schedule_view_model.dart';
+import '../../../application/view_models/stats_view_model.dart';
 import '../../../domain/entities/routine.dart';
+import '../../../domain/services/achievement_service.dart';
 import '../../widgets/routine_card.dart';
 import '../../widgets/upcoming_schedule_card.dart';
 
@@ -45,10 +47,30 @@ class HomeScreen extends ConsumerWidget {
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('다가오는 일정',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                )),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('다가오는 일정',
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.calendar_month, size: 20),
+                                  tooltip: '캘린더',
+                                  onPressed: () => Navigator.pushNamed(
+                                      context, '/schedule/calendar'),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pushNamed(
+                                      context, '/schedule/list'),
+                                  child: const Text('전체 보기'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                         const SizedBox(height: 8),
                         ...schedules.take(2).map((s) => UpcomingScheduleCard(schedule: s)),
                         const SizedBox(height: 20),
@@ -94,21 +116,22 @@ class HomeScreen extends ConsumerWidget {
                         total: todayRoutines.length,
                       ),
                       const SizedBox(height: 12),
-                      ...todayRoutines.map((routine) => RoutineCard(
-                            routine: routine,
-                            isCompleted: completedIds.contains(routine.id),
-                            onToggle: () => ref
-                                .read(routineViewModelProvider.notifier)
-                                .toggleComplete(
-                                  routine.id!,
-                                  completedIds.contains(routine.id),
-                                ),
-                            onEdit: () => Navigator.pushNamed(
-                              context,
-                              '/routine/edit',
-                              arguments: routine,
-                            ),
-                          )),
+                      ...todayRoutines.map((routine) {
+                            final streakAsync = ref.watch(routineStreakProvider(routine.id!));
+                            return RoutineCard(
+                              routine: routine,
+                              isCompleted: completedIds.contains(routine.id),
+                              streak: streakAsync.valueOrNull ?? 0,
+                              onToggle: () => _toggleWithAchievementCheck(
+                                    context, ref, routine, completedIds,
+                                  ),
+                              onEdit: () => Navigator.pushNamed(
+                                context,
+                                '/routine/edit',
+                                arguments: routine,
+                              ),
+                            );
+                          }),
                     ],
                   ),
                   loading: () => const CircularProgressIndicator(),
@@ -139,6 +162,61 @@ class HomeScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+Future<void> _toggleWithAchievementCheck(
+  BuildContext context,
+  WidgetRef ref,
+  Routine routine,
+  List<int> completedIds,
+) async {
+  final isCompleted = completedIds.contains(routine.id);
+
+  // 완료로 바꾸는 경우만 업적 체크 (해제할 때는 체크 불필요)
+  if (!isCompleted) {
+    final before = await ref.read(achievementProvider.future);
+    await ref.read(routineViewModelProvider.notifier).toggleComplete(routine.id!, false);
+    // 스트릭 캐시 무효화 후 재계산
+    ref.invalidate(routineStreakProvider(routine.id!));
+    final after = await ref.read(achievementProvider.future);
+
+    final newlyUnlocked = AchievementService().getNewlyUnlocked(before, after);
+    if (newlyUnlocked.isNotEmpty && context.mounted) {
+      _showAchievementDialog(context, newlyUnlocked.first.title);
+    }
+  } else {
+    await ref.read(routineViewModelProvider.notifier).toggleComplete(routine.id!, true);
+  }
+}
+
+void _showAchievementDialog(BuildContext context, String title) {
+  showDialog(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: const Row(
+        children: [
+          Text('🏆 ', style: TextStyle(fontSize: 24)),
+          Text('업적 달성!'),
+        ],
+      ),
+      content: Text(
+        '"$title" 업적을 달성했습니다!\n꾸준함이 빛을 발하고 있어요.',
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(ctx),
+          child: const Text('확인'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(ctx);
+            Navigator.pushNamed(context, '/achievements');
+          },
+          child: const Text('업적 보기'),
+        ),
+      ],
+    ),
+  );
 }
 
 class _ProgressBar extends StatelessWidget {

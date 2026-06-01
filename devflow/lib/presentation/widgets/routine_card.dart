@@ -4,6 +4,7 @@ import '../../domain/entities/routine.dart';
 class RoutineCard extends StatelessWidget {
   final Routine routine;
   final bool isCompleted;
+  final int streak;
   final VoidCallback onToggle;
   final VoidCallback onEdit;
 
@@ -11,6 +12,7 @@ class RoutineCard extends StatelessWidget {
     super.key,
     required this.routine,
     required this.isCompleted,
+    required this.streak,
     required this.onToggle,
     required this.onEdit,
   });
@@ -34,9 +36,22 @@ class RoutineCard extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        subtitle: routine.goal != null
-            ? Text(routine.goal!, maxLines: 1, overflow: TextOverflow.ellipsis)
-            : null,
+        subtitle: Row(
+          children: [
+            if (streak > 0) ...[
+              const Icon(Icons.local_fire_department, size: 14, color: Colors.orange),
+              Text(
+                ' $streak일',
+                style: const TextStyle(fontSize: 12, color: Colors.orange, fontWeight: FontWeight.w600),
+              ),
+              if (routine.goal != null) const Text('  ·  ', style: TextStyle(fontSize: 12)),
+            ],
+            if (routine.goal != null)
+              Expanded(
+                child: Text(routine.goal!, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12)),
+              ),
+          ],
+        ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
