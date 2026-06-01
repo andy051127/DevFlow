@@ -59,6 +59,18 @@ GitHub 잔디처럼 나의 꾸준함을 시각적으로 확인하고,
 
 ---
 
+## 발표 자료 (GitHub Pages)
+
+| 자료 | URL |
+|---|---|
+| 발표 허브 (인덱스) | `https://<username>.github.io/<repo>/docs/` |
+| 중간발표 슬라이드 | `https://<username>.github.io/<repo>/docs/presentation/interim.html` |
+| WBS 시각화 | `https://<username>.github.io/<repo>/docs/wbs.html` |
+
+> GitHub Pages 설정: Repository Settings → Pages → Source: **Deploy from a branch** → Branch: `main` / `/ (root)`
+
+---
+
 ## 문서 목록
 
 | 문서 | 경로 |

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevFlow — 중간 발표</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
+<style>
+  :root {
+    --primary: #2563eb;
+    --secondary: #1e40af;
+    --accent: #3b82f6;
+    --bg: #ffffff;
+    --card: #f1f5f9;
+    --card-border: #e2e8f0;
+    --text: #1e293b;
+    --muted: #64748b;
+  }
+  .reveal {
+    font-family: 'Segoe UI', sans-serif;
+    color: var(--text);
+  }
+  .reveal h1 { color: var(--primary); font-size: 2em; }
+  .reveal h2 { color: var(--secondary); border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+  .reveal strong { color: var(--primary); }
+  .reveal blockquote {
+    border-left: 4px solid var(--accent);
+    background: var(--card);
+    padding: 12px 20px;
+    color: var(--muted);
+    font-style: normal;
+  }
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7em;
+    font-weight: bold;
+    margin: 2px;
+  }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-green { background: #dcfce7; color: #166534; }
+
+  /* 아키텍처 보완 */
+  .arch-container {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+    margin-top: 12px;
+  }
+  .arch-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+  }
+  .arch-layer {
+    padding: 10px 16px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75em;
+  }
+  .arch-layer .label { font-weight: bold; font-size: 1em; }
+  .arch-layer .detail { color: var(--muted); font-size: 0.8em; }
+  .arch-arrow { text-align: center; color: #94a3b8; font-size: 0.9em; line-height: 1; }
+  .l-presentation { background: #dbeafe; border-left: 4px solid #3b82f6; color: #1e3a5f; }
+  .l-application  { background: #e0e7ff; border-left: 4px solid #6366f1; color: #312e81; }
+  .l-domain       { background: #ede9fe; border-left: 4px solid #8b5cf6; color: #4c1d95; }
+  .l-data         { background: #ccfbf1; border-left: 4px solid #14b8a6; color: #134e4a; }
+
+  .arch-detail-box {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .arch-detail-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.65em;
+    line-height: 1.5;
+  }
+  .arch-detail-card .card-title {
+    font-weight: bold;
+    color: var(--secondary);
+    margin-bottom: 2px;
+    font-size: 1.05em;
+  }
+  .arch-detail-card .card-body { color: var(--muted); }
+
+  /* 진행 상황 */
+  .status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .status-item {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78em;
+  }
+  .status-item.done { border-left: 3px solid #22c55e; }
+  .status-item.todo { border-left: 3px solid #f59e0b; }
+  .progress-bar {
+    background: #e2e8f0;
+    border-radius: 8px;
+    height: 12px;
+    margin: 6px 0;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #2563eb, #60a5fa);
+    transition: width 1s ease;
+  }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- 슬라이드 1: 타이틀 -->
+<section>
+  <h1>DevFlow</h1>
+  <h3 style="color:var(--muted); font-weight:400;">중간 발표</h3>
+  <br>
+  <blockquote>
+    개발자의 루틴과 일정을 한 곳에서 관리하고,<br>
+    <strong>꾸준함을 숫자로 증명한다.</strong>
+  </blockquote>
+  <br>
+  <p style="color:#94a3b8; font-size:0.7em;">김찬희 · 앱프로그래밍 · 2026.06.01</p>
+</section>
+
+<!-- 슬라이드 2: 문제 정의 -->
+<section>
+  <h2>문제 정의</h2>
+  <p style="color:var(--muted); font-size:0.85em;">개발자에겐 <strong>두 가지 숙제</strong>가 있다</p>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;">
+    <div style="background:var(--card); border-radius:12px; padding:18px; border-top:3px solid #3b82f6;">
+      <div style="font-size:1.3em; margin-bottom:6px;">🔄</div>
+      <div style="color:var(--primary); font-weight:bold; margin-bottom:10px; font-size:0.95em;">매일 반복</div>
+      <div style="color:var(--muted); font-size:0.8em; line-height:1.8;">
+        알고리즘 풀기<br>기술 블로그 읽기<br>사이드 프로젝트
+      </div>
+    </div>
+    <div style="background:var(--card); border-radius:12px; padding:18px; border-top:3px solid #8b5cf6;">
+      <div style="font-size:1.3em; margin-bottom:6px;">🎯</div>
+      <div style="color:#7c3aed; font-weight:bold; margin-bottom:10px; font-size:0.95em;">장기 목표</div>
+      <div style="color:var(--muted); font-size:0.8em; line-height:1.8;">
+        포트폴리오 제출<br>코딩 테스트<br>취업 준비
+      </div>
+    </div>
+  </div>
+  <blockquote style="margin-top:16px; font-size:0.8em;">
+    기존 앱은 이 둘을 <strong>따로</strong> 관리한다.
+    DevFlow는 <strong>하나의 흐름</strong>으로 연결한다.
+  </blockquote>
+</section>
+
+<!-- 슬라이드 3: 아키텍처 (보완) -->
+<section>
+  <h2>아키텍처</h2>
+  <div class="arch-container">
+    <div class="arch-box">
+      <div class="arch-layer l-presentation">
+        <div>
+          <div class="label">Presentation</div>
+          <div class="detail">화면 · 위젯 · 라우팅</div>
+        </div>
+        <span class="badge badge-blue">Flutter</span>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-layer l-application">
+        <div>
+          <div class="label">Application</div>
+          <div class="detail">ViewModel · 상태 관리</div>
+        </div>
+        <span class="badge badge-blue">Riverpod</span>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-layer l-domain">
+        <div>
+          <div class="label">Domain</div>
+          <div class="detail">엔티티 · 서비스 로직</div>
+        </div>
+        <span class="badge badge-blue">Pure Dart</span>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-layer l-data">
+        <div>
+          <div class="label">Data</div>
+          <div class="detail">Repository · DB</div>
+        </div>
+        <span class="badge badge-blue">SQLite</span>
+      </div>
+    </div>
+
+    <div class="arch-detail-box">
+      <div class="arch-detail-card">
+        <div class="card-title">왜 Riverpod?</div>
+        <div class="card-body">Provider 대비 타입 안전성·테스트 용이성 우수.<br>StateNotifier + FutureProvider 조합으로 비동기 관리.</div>
+      </div>
+      <div class="arch-detail-card">
+        <div class="card-title">왜 SQLite (오프라인)?</div>
+        <div class="card-body">외부 서버 비용 제로. 이전 프로젝트(LLM-wiki)에서<br>API 비용 문제로 중단된 경험 반영.</div>
+      </div>
+      <div class="arch-detail-card">
+        <div class="card-title">데이터 흐름</div>
+        <div class="card-body">UI → ViewModel → Repository → SQLite<br>단방향 흐름으로 디버깅·테스트 용이.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 슬라이드 4: 진행 상황 -->
+<section>
+  <h2>진행 상황</h2>
+  <div style="margin-bottom:10px;">
+    <div style="display:flex; justify-content:space-between; font-size:0.75em; color:var(--muted);">
+      <span>Must 기능 진척률</span><span><strong style="color:var(--primary);">70%</strong></span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width:70%;"></div>
+    </div>
+  </div>
+  <div class="status-grid">
+    <div class="status-item done">✅ 루틴 CRUD + 완료 체크</div>
+    <div class="status-item done">✅ 진행률 바</div>
+    <div class="status-item done">✅ 스트릭 계산</div>
+    <div class="status-item done">✅ 일정 CRUD</div>
+    <div class="status-item done">✅ 홈 화면 · 통계 화면</div>
+    <div class="status-item done">✅ 레이어드 아키텍처</div>
+    <div class="status-item todo">⏳ 푸시 알림</div>
+    <div class="status-item todo">⏳ 업적 시스템 UI</div>
+  </div>
+</section>
+
+<!-- 슬라이드 5: 남은 일정 -->
+<section>
+  <h2>남은 일정</h2>
+  <div style="display:flex; flex-direction:column; gap:10px; margin-top:16px;">
+    <div style="background:var(--card); border-radius:10px; padding:14px 18px; border-left:4px solid #3b82f6; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <div style="color:var(--primary); font-weight:bold; font-size:0.9em;">13주차</div>
+        <div style="color:var(--muted); font-size:0.78em; margin-top:4px;">일정 완료 체크 UI · 스트릭 홈 표시 · 테스트 작성</div>
+      </div>
+      <span class="badge badge-blue">구현</span>
+    </div>
+    <div style="background:var(--card); border-radius:10px; padding:14px 18px; border-left:4px solid #6366f1; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <div style="color:#6366f1; font-weight:bold; font-size:0.9em;">14주차</div>
+        <div style="color:var(--muted); font-size:0.78em; margin-top:4px;">알림 · 히트맵 고도화 · 문서 완비</div>
+      </div>
+      <span class="badge badge-blue">마감</span>
+    </div>
+    <div style="background:var(--card); border-radius:10px; padding:14px 18px; border-left:4px solid #22c55e; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <div style="color:#16a34a; font-weight:bold; font-size:0.9em;">15주차</div>
+        <div style="color:var(--muted); font-size:0.78em; margin-top:4px;">최종 발표 · 회고</div>
+      </div>
+      <span class="badge badge-green">발표</span>
+    </div>
+  </div>
+  <p style="text-align:center; margin-top:16px; color:#94a3b8; font-size:0.7em;">
+    WBS 전체 현황 → <a href="../wbs.html" style="color:var(--primary);">GitHub Pages WBS 보기</a>
+  </p>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    transition: 'slide',
+    controls: true,
+    progress: true,
+    center: true,
+    width: 1280,
+    height: 780,
+    margin: 0.08,
+  });
+</script>
+</body>
+</html>

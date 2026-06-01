@@ -1,0 +1,5 @@
+package com.devflow.devflow
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity : FlutterActivity()

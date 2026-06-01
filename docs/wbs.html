@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevFlow — WBS</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --border: #2d3748;
+    --primary: #60a5fa;
+    --secondary: #93c5fd;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', sans-serif;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  header { text-align: center; margin-bottom: 48px; }
+  header h1 { color: var(--primary); font-size: 2em; margin-bottom: 8px; }
+  header p { color: var(--muted); font-size: 0.95em; }
+
+  .summary-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .summary-card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border-top: 3px solid var(--primary);
+  }
+  .summary-card.green { border-top-color: var(--green); }
+  .summary-card.amber { border-top-color: var(--amber); }
+  .summary-card .num { font-size: 2em; font-weight: bold; color: var(--primary); }
+  .summary-card.green .num { color: var(--green); }
+  .summary-card.amber .num { color: var(--amber); }
+  .summary-card .label { color: var(--muted); font-size: 0.85em; margin-top: 4px; }
+
+  .overall-progress { background: var(--card); border-radius: 12px; padding: 20px; margin-bottom: 40px; }
+  .overall-progress h3 { color: var(--secondary); margin-bottom: 12px; font-size: 1em; }
+  .progress-bar { background: #1e293b; border-radius: 8px; height: 16px; overflow: hidden; border: 1px solid var(--border); }
+  .progress-fill { height: 100%; border-radius: 8px; background: linear-gradient(90deg, #1d4ed8, #60a5fa); }
+  .progress-label { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.8em; color: var(--muted); }
+
+  .section { margin-bottom: 32px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--card);
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    border-left: 4px solid var(--primary);
+    cursor: pointer;
+    user-select: none;
+  }
+  .section-header:hover { background: #263548; }
+  .section-title { font-weight: bold; font-size: 1em; color: var(--secondary); }
+  .section-meta { display: flex; align-items: center; gap: 12px; font-size: 0.8em; color: var(--muted); }
+  .section-progress { color: var(--primary); font-weight: bold; }
+  .chevron { transition: transform 0.2s; }
+  .section.collapsed .chevron { transform: rotate(-90deg); }
+
+  .task-list { border: 1px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; }
+  .section.collapsed .task-list { display: none; }
+
+  .task-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.875em;
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-item.done { background: rgba(34, 197, 94, 0.05); }
+  .task-item.todo { background: rgba(245, 158, 11, 0.03); }
+
+  .status-icon { font-size: 1.1em; flex-shrink: 0; width: 20px; text-align: center; }
+  .task-name { flex: 1; }
+  .task-name.done-text { color: var(--muted); text-decoration: line-through; }
+  .task-week {
+    background: #1e3a5f;
+    color: var(--secondary);
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 0.75em;
+    white-space: nowrap;
+  }
+  .task-week.week-past { background: #14532d; color: #86efac; }
+
+  footer { text-align: center; margin-top: 60px; color: var(--muted); font-size: 0.8em; }
+  footer a { color: var(--primary); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>💻 DevFlow — WBS</h1>
+    <p>Work Breakdown Structure · 앱프로그래밍 기말 과제</p>
+  </header>
+
+  <div class="summary-bar">
+    <div class="summary-card green">
+      <div class="num" id="done-count">—</div>
+      <div class="label">완료 항목</div>
+    </div>
+    <div class="summary-card amber">
+      <div class="num" id="todo-count">—</div>
+      <div class="label">진행 예정</div>
+    </div>
+    <div class="summary-card">
+      <div class="num" id="total-count">—</div>
+      <div class="label">전체 항목</div>
+    </div>
+  </div>
+
+  <div class="overall-progress">
+    <h3>전체 진척률</h3>
+    <div class="progress-bar">
+      <div class="progress-fill" id="overall-fill" style="width:0%"></div>
+    </div>
+    <div class="progress-label">
+      <span>0%</span>
+      <span id="overall-pct" style="color:#60a5fa; font-weight:bold;">—</span>
+      <span>100%</span>
+    </div>
+  </div>
+
+  <div id="wbs-root"></div>
+
+  <footer>
+    <p>DevFlow · 김찬희 · 앱프로그래밍 2026 &nbsp;|&nbsp;
+      <a href="presentation/interim.html">중간발표 슬라이드 →</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+const WBS = [
+  {
+    id: 'infra',
+    title: '🏗️ 프로젝트 기반 설정',
+    color: '#3b82f6',
+    tasks: [
+      { name: 'Flutter 프로젝트 생성 및 패키지 설정', done: true, week: '12주차' },
+      { name: 'SQLite 스키마 정의 (routines, routine_logs, schedules)', done: true, week: '12주차' },
+      { name: '레이어드 아키텍처 디렉토리 구조 구성', done: true, week: '12주차' },
+      { name: 'Riverpod ProviderScope 초기화', done: true, week: '12주차' },
+      { name: '더미 시드 데이터 삽입 (30일 로그)', done: true, week: '12주차' },
+    ]
+  },
+  {
+    id: 'routine',
+    title: '🔄 루틴 관리 (M-01 ~ M-03)',
+    color: '#6366f1',
+    tasks: [
+      { name: '루틴 엔티티 모델 정의 (Routine)', done: true, week: '12주차' },
+      { name: 'RoutineRepository CRUD 구현', done: true, week: '12주차' },
+      { name: 'RoutineViewModel (StateNotifier) 구현', done: true, week: '12주차' },
+      { name: '홈 화면 — 오늘 루틴 카드 목록', done: true, week: '12주차' },
+      { name: '루틴 완료 체크 버튼 (토글)', done: true, week: '12주차' },
+      { name: '루틴 추가/수정/삭제 폼 화면', done: true, week: '12주차' },
+      { name: '반복 요일 선택 칩 UI', done: true, week: '12주차' },
+      { name: '진행률 바 (오늘 완료/전체)', done: true, week: '12주차' },
+    ]
+  },
+  {
+    id: 'streak',
+    title: '🔥 스트릭 & 통계 (M-04, M-05)',
+    color: '#f59e0b',
+    tasks: [
+      { name: 'StreakService.calculate() 구현', done: true, week: '12주차' },
+      { name: 'StreakService.buildHeatmap() 구현', done: true, week: '12주차' },
+      { name: '통계 화면 — 히트맵 그리드', done: true, week: '12주차' },
+      { name: '통계 화면 — 루틴별 스트릭 리스트', done: true, week: '12주차' },
+      { name: '홈 화면 루틴 카드에 스트릭 표시', done: false, week: '13주차' },
+    ]
+  },
+  {
+    id: 'schedule',
+    title: '📅 일정 관리 (M-06, M-07)',
+    color: '#10b981',
+    tasks: [
+      { name: '일정 엔티티 모델 정의 (Schedule)', done: true, week: '12주차' },
+      { name: 'ScheduleRepository CRUD 구현', done: true, week: '12주차' },
+      { name: 'ScheduleViewModel (StateNotifier) 구현', done: true, week: '12주차' },
+      { name: '홈 화면 — 다가오는 일정 카드 (D-day)', done: true, week: '12주차' },
+      { name: '일정 추가/수정/삭제 폼 화면', done: true, week: '12주차' },
+      { name: '일정 완료 체크 UI', done: false, week: '13주차' },
+      { name: '전체 일정 목록 화면', done: false, week: '13주차' },
+    ]
+  },
+  {
+    id: 'notification',
+    title: '🔔 알림 (M-08)',
+    color: '#8b5cf6',
+    tasks: [
+      { name: 'flutter_local_notifications 패키지 연동', done: false, week: '14주차' },
+      { name: '루틴 알람 시간 설정 UI', done: false, week: '14주차' },
+      { name: '일일 알림 스케줄 등록 로직', done: false, week: '14주차' },
+      { name: 'Android Core Library Desugaring 설정', done: true, week: '12주차' },
+    ]
+  },
+  {
+    id: 'achievement',
+    title: '🏆 업적 시스템 (S-01)',
+    color: '#ec4899',
+    tasks: [
+      { name: 'Achievement 엔티티 및 기본 업적 정의', done: true, week: '12주차' },
+      { name: 'AchievementService.evaluate() 구현', done: true, week: '12주차' },
+      { name: '업적 달성 알림 UI (스낵바/다이얼로그)', done: false, week: '14주차' },
+      { name: '업적 목록 화면', done: false, week: '14주차' },
+    ]
+  },
+  {
+    id: 'docs',
+    title: '📄 문서 & 발표',
+    color: '#06b6d4',
+    tasks: [
+      { name: '기획 문서 (.planning/) 작성', done: true, week: '12주차' },
+      { name: 'ADR 3종 (플랫폼/상태관리/저장소)', done: true, week: '12주차' },
+      { name: 'README.md 완성', done: true, week: '12주차' },
+      { name: 'AGENTS.md (AI 협업 규칙)', done: true, week: '12주차' },
+      { name: 'AUTHORING.Chanhee.md', done: true, week: '12주차' },
+      { name: '중간발표 슬라이드 (reveal.js)', done: true, week: '12주차' },
+      { name: 'WBS 시각화 HTML', done: true, week: '12주차' },
+      { name: '최종 발표 자료', done: false, week: '15주차' },
+      { name: '테스트 코드 (StreakService 단위 테스트)', done: false, week: '13주차' },
+    ]
+  },
+];
+
+function renderWBS() {
+  const root = document.getElementById('wbs-root');
+  let totalDone = 0, totalAll = 0;
+
+  WBS.forEach(section => {
+    const done = section.tasks.filter(t => t.done).length;
+    const total = section.tasks.length;
+    const pct = Math.round((done / total) * 100);
+    totalDone += done;
+    totalAll += total;
+
+    const el = document.createElement('div');
+    el.className = 'section';
+    el.innerHTML = `
+      <div class="section-header" style="border-left-color:${section.color}" onclick="toggleSection(this)">
+        <span class="section-title">${section.title}</span>
+        <span class="section-meta">
+          <span>${done}/${total}</span>
+          <span class="section-progress">${pct}%</span>
+          <span class="chevron">▾</span>
+        </span>
+      </div>
+      <div class="task-list">
+        ${section.tasks.map(t => `
+          <div class="task-item ${t.done ? 'done' : 'todo'}">
+            <span class="status-icon">${t.done ? '✅' : '⏳'}</span>
+            <span class="task-name ${t.done ? 'done-text' : ''}">${t.name}</span>
+            <span class="task-week ${t.done ? 'week-past' : ''}">${t.week}</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    root.appendChild(el);
+  });
+
+  const pct = Math.round((totalDone / totalAll) * 100);
+  document.getElementById('done-count').textContent = totalDone;
+  document.getElementById('todo-count').textContent = totalAll - totalDone;
+  document.getElementById('total-count').textContent = totalAll;
+  document.getElementById('overall-fill').style.width = pct + '%';
+  document.getElementById('overall-pct').textContent = pct + '%';
+}
+
+function toggleSection(header) {
+  header.parentElement.classList.toggle('collapsed');
+}
+
+renderWBS();
+</script>
+</body>
+</html>
