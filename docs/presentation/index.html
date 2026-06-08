@@ -152,14 +152,14 @@
   <p style="color:var(--muted); font-size:0.85em;">개발자에겐 <strong>두 가지 숙제</strong>가 있다</p>
   <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;">
     <div style="background:var(--card); border-radius:12px; padding:18px; border-top:3px solid #3b82f6;">
-      <div style="font-size:1.3em; margin-bottom:6px;">🔄</div>
+      <div style="font-size:0.68em; font-weight:bold; color:#1e40af; background:#dbeafe; border:1px solid #93c5fd; display:inline-block; padding:2px 10px; border-radius:4px; margin-bottom:8px; letter-spacing:0.04em;">반복</div>
       <div style="color:var(--primary); font-weight:bold; margin-bottom:10px; font-size:0.95em;">매일 반복</div>
       <div style="color:var(--muted); font-size:0.8em; line-height:1.8;">
         알고리즘 풀기<br>기술 블로그 읽기<br>사이드 프로젝트
       </div>
     </div>
     <div style="background:var(--card); border-radius:12px; padding:18px; border-top:3px solid #8b5cf6;">
-      <div style="font-size:1.3em; margin-bottom:6px;">🎯</div>
+      <div style="font-size:0.68em; font-weight:bold; color:#6d28d9; background:#ede9fe; border:1px solid #c4b5fd; display:inline-block; padding:2px 10px; border-radius:4px; margin-bottom:8px; letter-spacing:0.04em;">목표</div>
       <div style="color:#7c3aed; font-weight:bold; margin-bottom:10px; font-size:0.95em;">장기 목표</div>
       <div style="color:var(--muted); font-size:0.8em; line-height:1.8;">
         포트폴리오 제출<br>코딩 테스트<br>취업 준비
@@ -232,21 +232,21 @@
   <h2>진행 상황</h2>
   <div style="margin-bottom:10px;">
     <div style="display:flex; justify-content:space-between; font-size:0.75em; color:var(--muted);">
-      <span>Must 기능 진척률</span><span><strong style="color:var(--primary);">70%</strong></span>
+      <span>전체 진척률 (Must · Should · Could)</span><span><strong style="color:var(--primary);">100%</strong></span>
     </div>
     <div class="progress-bar">
-      <div class="progress-fill" style="width:70%;"></div>
+      <div class="progress-fill" style="width:100%;"></div>
     </div>
   </div>
   <div class="status-grid">
-    <div class="status-item done">✅ 루틴 CRUD + 완료 체크</div>
-    <div class="status-item done">✅ 진행률 바</div>
-    <div class="status-item done">✅ 스트릭 계산</div>
-    <div class="status-item done">✅ 일정 CRUD</div>
-    <div class="status-item done">✅ 홈 화면 · 통계 화면</div>
-    <div class="status-item done">✅ 레이어드 아키텍처</div>
-    <div class="status-item todo">⏳ 푸시 알림</div>
-    <div class="status-item todo">⏳ 업적 시스템 UI</div>
+    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 루틴 CRUD · 완료 체크 · 스트릭</div>
+    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 진행률 바 · 통계 · 히트맵</div>
+    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 일정 관리 · 캘린더 · 목록</div>
+    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 푸시 알림 · 알람 설정</div>
+    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 업적 시스템 UI</div>
+    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 다크모드 · 홈 화면 위젯</div>
+    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 레이어드 아키텍처</div>
+    <div class="status-item done"><span style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:0.75em;font-weight:bold;margin-right:6px;background:#dcfce7;color:#166534;border:1px solid #86efac;">완료</span> 발표 자료 · WBS</div>
   </div>
 </section>
 
@@ -254,31 +254,36 @@
 <section>
   <h2>남은 일정</h2>
   <div style="display:flex; flex-direction:column; gap:10px; margin-top:16px;">
-    <div style="background:var(--card); border-radius:10px; padding:14px 18px; border-left:4px solid #3b82f6; display:flex; justify-content:space-between; align-items:center;">
-      <div>
-        <div style="color:var(--primary); font-weight:bold; font-size:0.9em;">13주차</div>
-        <div style="color:var(--muted); font-size:0.78em; margin-top:4px;">일정 완료 체크 UI · 스트릭 홈 표시 · 테스트 작성</div>
+    <div style="background:#f0fdf4; border-radius:10px; padding:14px 18px; border-left:4px solid #22c55e; display:flex; justify-content:space-between; align-items:center;">
+      <div style="text-align:left;">
+        <div style="color:#16a34a; font-weight:bold; font-size:0.9em;">13주차 — 완료</div>
+        <div style="color:var(--muted); font-size:0.78em; margin-top:4px; padding-left:0;">Must 전체 완성 · Should 완성 · Could 부분 완성</div>
       </div>
-      <span class="badge badge-blue">구현</span>
+      <span class="badge badge-green">완료</span>
+    </div>
+    <div style="background:var(--card); border-radius:10px; padding:14px 18px; border-left:4px solid #3b82f6; display:flex; justify-content:space-between; align-items:center;">
+      <div style="text-align:left;">
+        <div style="color:var(--primary); font-weight:bold; font-size:0.9em;">14주차</div>
+        <div style="color:var(--muted); font-size:0.78em; margin-top:4px; padding-left:0;">단위 테스트 작성 · 문서 완비 · 코드 정리</div>
+      </div>
+      <span class="badge badge-blue">진행 중</span>
     </div>
     <div style="background:var(--card); border-radius:10px; padding:14px 18px; border-left:4px solid #6366f1; display:flex; justify-content:space-between; align-items:center;">
-      <div>
-        <div style="color:#6366f1; font-weight:bold; font-size:0.9em;">14주차</div>
-        <div style="color:var(--muted); font-size:0.78em; margin-top:4px;">알림 · 히트맵 고도화 · 문서 완비</div>
+      <div style="text-align:left;">
+        <div style="color:#6366f1; font-weight:bold; font-size:0.9em;">15주차</div>
+        <div style="color:var(--muted); font-size:0.78em; margin-top:4px; padding-left:0;">최종 발표 · 회고</div>
       </div>
-      <span class="badge badge-blue">마감</span>
-    </div>
-    <div style="background:var(--card); border-radius:10px; padding:14px 18px; border-left:4px solid #22c55e; display:flex; justify-content:space-between; align-items:center;">
-      <div>
-        <div style="color:#16a34a; font-weight:bold; font-size:0.9em;">15주차</div>
-        <div style="color:var(--muted); font-size:0.78em; margin-top:4px;">최종 발표 · 회고</div>
-      </div>
-      <span class="badge badge-green">발표</span>
+      <span class="badge badge-blue">예정</span>
     </div>
   </div>
-  <p style="text-align:center; margin-top:16px; color:#94a3b8; font-size:0.7em;">
-    WBS 전체 현황 → <a href="../wbs.html" style="color:var(--primary);">GitHub Pages WBS 보기</a>
-  </p>
+  <div style="text-align:center; margin-top:20px;">
+    <a href="../wbs.html" target="_blank"
+       style="display:inline-block; padding:10px 28px; background:var(--primary); color:#fff;
+              border-radius:8px; font-size:0.8em; font-weight:bold; text-decoration:none;
+              letter-spacing:0.03em;">
+      WBS 전체 현황 보기 &rarr;
+    </a>
+  </div>
 </section>
 
 </div>
