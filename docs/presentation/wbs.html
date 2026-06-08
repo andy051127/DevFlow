@@ -26,16 +26,16 @@
     background: var(--bg);
     color: var(--text);
     font-family: 'Segoe UI', sans-serif;
-    padding: 48px 20px;
+    padding: 60px 32px;
     min-height: 100vh;
   }
-  .container { max-width: 900px; margin: 0 auto; }
+  .container { max-width: 1100px; margin: 0 auto; }
 
   /* 헤더 */
   header { text-align: center; margin-bottom: 48px; }
   header h1 {
     color: var(--primary);
-    font-size: 1.9em;
+    font-size: 2.4em;
     font-weight: bold;
     letter-spacing: -0.01em;
     margin-bottom: 6px;
@@ -49,37 +49,37 @@
     vertical-align: middle;
     margin-right: 10px;
   }
-  header p { color: var(--muted); font-size: 0.9em; }
+  header p { color: var(--muted); font-size: 1em; }
 
   /* 요약 카드 */
   .summary-bar {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: 20px;
     margin-bottom: 32px;
   }
   .summary-card {
     background: var(--card);
     border: 1px solid var(--card-border);
     border-radius: 12px;
-    padding: 20px;
+    padding: 28px;
     text-align: center;
     border-top: 3px solid var(--accent);
   }
   .summary-card.green { border-top-color: var(--green); }
   .summary-card.amber { border-top-color: var(--amber); }
-  .summary-card .num { font-size: 2em; font-weight: bold; color: var(--primary); }
+  .summary-card .num { font-size: 2.6em; font-weight: bold; color: var(--primary); }
   .summary-card.green .num { color: var(--green); }
   .summary-card.amber .num { color: var(--amber); }
-  .summary-card .label { color: var(--muted); font-size: 0.82em; margin-top: 4px; }
+  .summary-card .label { color: var(--muted); font-size: 0.95em; margin-top: 4px; }
 
   /* 전체 진척률 */
   .overall-progress {
     background: var(--card);
     border: 1px solid var(--card-border);
     border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 36px;
+    padding: 28px;
+    margin-bottom: 40px;
   }
   .overall-progress h3 {
     color: var(--secondary);
@@ -91,7 +91,7 @@
   .progress-bar {
     background: #e2e8f0;
     border-radius: 8px;
-    height: 14px;
+    height: 18px;
     overflow: hidden;
   }
   .progress-fill {
@@ -110,7 +110,7 @@
   .progress-label #overall-pct { color: var(--primary); font-weight: bold; }
 
   /* 섹션 */
-  .section { margin-bottom: 28px; }
+  .section { margin-bottom: 36px; }
   .section-header {
     display: flex;
     align-items: center;
@@ -119,12 +119,12 @@
     border: 1px solid var(--card-border);
     border-radius: 10px 10px 0 0;
     border-left: 4px solid var(--accent);
-    padding: 13px 18px;
+    padding: 16px 22px;
     cursor: pointer;
     user-select: none;
   }
   .section-header:hover { background: #f1f5f9; }
-  .section-title { font-weight: bold; font-size: 0.95em; color: var(--secondary); }
+  .section-title { font-weight: bold; font-size: 1.05em; color: var(--secondary); }
   .section-meta { display: flex; align-items: center; gap: 12px; font-size: 0.78em; color: var(--muted); }
   .section-progress { color: var(--primary); font-weight: bold; }
   .chevron { transition: transform 0.2s; color: var(--muted); }
@@ -143,9 +143,9 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 11px 18px;
+    padding: 14px 22px;
     border-bottom: 1px solid var(--card-border);
-    font-size: 0.85em;
+    font-size: 0.95em;
     background: var(--card);
   }
   .task-item:last-child { border-bottom: none; }
@@ -155,9 +155,9 @@
   /* 상태 배지 */
   .status-badge {
     display: inline-block;
-    padding: 2px 8px;
+    padding: 3px 10px;
     border-radius: 4px;
-    font-size: 0.72em;
+    font-size: 0.8em;
     font-weight: bold;
     flex-shrink: 0;
     letter-spacing: 0.02em;
@@ -180,8 +180,8 @@
     background: #dbeafe;
     color: var(--secondary);
     border-radius: 10px;
-    padding: 2px 10px;
-    font-size: 0.72em;
+    padding: 3px 12px;
+    font-size: 0.8em;
     white-space: nowrap;
     font-weight: 500;
   }
@@ -239,9 +239,18 @@
 
   <div id="wbs-root"></div>
 
+  <div style="text-align:center; margin-top:40px;">
+    <a href="demo.html"
+       style="display:inline-block; padding:12px 32px; background:#2563eb; color:#fff;
+              border-radius:8px; font-size:0.9em; font-weight:bold; text-decoration:none;
+              letter-spacing:0.03em;">
+      시연 영상 보기 &rarr;
+    </a>
+  </div>
+
   <footer>
     <p>DevFlow &middot; 김찬희 &middot; 앱프로그래밍 2026 &nbsp;|&nbsp;
-      <a href="presentation/index.html">&larr; 발표 슬라이드로 돌아가기</a>
+      <a href="index.html">&larr; 발표 슬라이드로 돌아가기</a>
     </p>
   </footer>
 </div>

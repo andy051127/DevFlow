@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevFlow — 시연 영상</title>
+<style>
+  :root {
+    --primary:     #2563eb;
+    --secondary:   #1e40af;
+    --accent:      #3b82f6;
+    --bg:          #f8fafc;
+    --card:        #ffffff;
+    --card-border: #e2e8f0;
+    --text:        #1e293b;
+    --muted:       #64748b;
+    --green:       #16a34a;
+    --green-bg:    #dcfce7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    padding: 56px 24px;
+  }
+  .container { max-width: 860px; margin: 0 auto; }
+
+  /* 헤더 */
+  header { text-align: center; margin-bottom: 40px; }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.85em;
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+  .back-link:hover { text-decoration: underline; }
+  header h1 {
+    font-size: 2em;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  header p { color: var(--muted); font-size: 0.95em; }
+
+  /* 배지 */
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    font-weight: bold;
+  }
+  .badge-blue  { background: #dbeafe; color: #1e40af; }
+  .badge-green { background: var(--green-bg); color: var(--green); }
+
+  /* 비디오 카드 */
+  .video-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    margin-bottom: 32px;
+  }
+  .video-wrapper {
+    position: relative;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+  }
+  video {
+    max-width: 100%;
+    max-height: 640px;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* 기능 요약 */
+  .feature-section { margin-bottom: 16px; }
+  .feature-section h2 {
+    font-size: 1em;
+    color: var(--secondary);
+    font-weight: bold;
+    padding: 16px 24px 12px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--card-border);
+    font-size: 0.88em;
+  }
+  .feature-item:nth-last-child(-n+2) { border-bottom: none; }
+  .feature-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .feature-item .name { font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .feature-item .desc { color: var(--muted); font-size: 0.9em; line-height: 1.4; }
+
+  /* 하단 내비 */
+  .nav-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .nav-btn {
+    display: inline-block;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 0.85em;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .nav-btn-primary { background: var(--primary); color: #fff; }
+  .nav-btn-outline { background: var(--card); color: var(--primary); border: 1px solid var(--accent); }
+  .nav-btn:hover { opacity: 0.85; }
+
+  /* 푸터 */
+  footer {
+    text-align: center;
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--card-border);
+    color: var(--muted);
+    font-size: 0.8em;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <a class="back-link" href="wbs.html">&larr; WBS로 돌아가기</a>
+    <h1>DevFlow 시연 영상</h1>
+    <p>앱프로그래밍 기말 과제 &middot; 김찬희 &middot; 2026</p>
+    <div class="badge-row">
+      <span class="badge badge-blue">Flutter</span>
+      <span class="badge badge-blue">Riverpod</span>
+      <span class="badge badge-blue">SQLite</span>
+      <span class="badge badge-green">Must 100%</span>
+      <span class="badge badge-green">Should 완료</span>
+    </div>
+  </header>
+
+  <div class="video-card">
+    <div class="video-wrapper">
+      <video controls playsinline>
+        <source src="KakaoTalk_20260608_100925236.mp4" type="video/mp4">
+        브라우저가 영상을 지원하지 않습니다.
+      </video>
+    </div>
+    <div class="feature-section">
+      <h2>시연 주요 기능</h2>
+      <div class="feature-grid">
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div>
+            <div class="name">루틴 관리</div>
+            <div class="desc">추가·수정·삭제, 요일별 반복 설정</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div>
+            <div class="name">완료 체크 & 스트릭</div>
+            <div class="desc">토글 체크, 연속 달성일 표시</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div>
+            <div class="name">일정 & 캘린더</div>
+            <div class="desc">D-day 카드, 캘린더 뷰, 완료 체크</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div>
+            <div class="name">통계 & 히트맵</div>
+            <div class="desc">12주 히트맵, 루틴별 스트릭 리스트</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div>
+            <div class="name">업적 시스템</div>
+            <div class="desc">달성 다이얼로그, 업적 목록 화면</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div>
+            <div class="name">푸시 알림 & 다크모드</div>
+            <div class="desc">루틴 알람 설정, 테마 전환</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn nav-btn-primary" href="index.html">발표 슬라이드 &rarr;</a>
+    <a class="nav-btn nav-btn-outline" href="wbs.html">WBS 보기 &rarr;</a>
+  </div>
+
+  <footer>DevFlow &middot; 김찬희 &middot; 앱프로그래밍 2026</footer>
+</div>
+</body>
+</html>
